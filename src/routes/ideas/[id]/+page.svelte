@@ -43,6 +43,7 @@
 					id,
 					authorid: user!.id,
 					authorhandle: user!.handle,
+					authorname: user!.name,
 					parent: null,
 					body: commentbody.trim(),
 					createdat: new Date(),
@@ -67,6 +68,7 @@
 						id: reply.id,
 						authorid: user!.id,
 						authorhandle: user!.handle,
+						authorname: user!.name,
 						parent: parentid,
 						body: reply.body,
 						createdat: new Date(),
@@ -114,15 +116,14 @@
 
 		<!-- Author meta -->
 		<div class="flex items-center gap-3 pb-6 mb-6 border-b border-[var(--p-border)]">
-			<span
-				class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0"
-				style="background: {avatargrad(idea.authorhandle)}"
-			>
-				{initials(idea.authorhandle)}
-			</span>
+			<a href="/profile/{idea.authorhandle}" class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 hover:opacity-80 transition-opacity" style="background: {avatargrad(idea.authorhandle)}">
+				{initials(idea.authorname || idea.authorhandle)}
+			</a>
 			<div>
 				<div class="text-[14px] font-medium text-[var(--p-text)]">
-					{idea.authorname || idea.authorhandle}
+					<a href="/profile/{idea.authorhandle}" class="hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
+						{idea.authorname || idea.authorhandle}
+					</a>
 				</div>
 				<div class="text-[12.5px] text-[var(--p-text-muted)]">
 					@{idea.authorhandle}
@@ -179,7 +180,7 @@
 					class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] shrink-0 border border-white/[0.08]"
 					style="background: {avatargrad(user.handle)}"
 				>
-					{initials(user.handle)}
+					{initials(user.name || user.handle)}
 				</span>
 				<div class="flex-1">
 					<textarea

@@ -38,6 +38,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 			id: comments.id,
 			authorid: comments.authorid,
 			authorhandle: users.handle,
+			authorname: users.name,
 			parent: comments.parent,
 			body: comments.body,
 			createdat: comments.createdat,
@@ -50,7 +51,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 		.innerJoin(users, eq(comments.authorid, users.id))
 		.leftJoin(commentvotes, eq(commentvotes.comment, comments.id))
 		.where(eq(comments.idea, id))
-		.groupBy(comments.id, users.id, users.handle)
+		.groupBy(comments.id, users.id, users.handle, users.name)
 		.orderBy(asc(comments.createdat));
 
 	type Reply = (typeof commentrows)[0];

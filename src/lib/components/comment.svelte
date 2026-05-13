@@ -8,6 +8,7 @@
 		id: string;
 		authorid: string;
 		authorhandle: string;
+		authorname: string;
 		parent: string | null;
 		body: string;
 		createdat: string | Date;
@@ -19,7 +20,7 @@
 	interface Props {
 		comment: CommentData;
 		ideaid: string;
-		user: { id: string; handle: string } | null;
+		user: { id: string; handle: string; name: string } | null;
 		onreply?: (reply: { id: string; body: string }) => void;
 		depth?: number;
 	}
@@ -61,17 +62,21 @@
 </script>
 
 <div class="flex gap-3 py-4">
-	<span
-		class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 mt-0.5"
-		style="background: {avatargrad(comment.authorhandle)}"
-	>
-		{initials(comment.authorhandle)}
-	</span>
+	<a href="/profile/{comment.authorhandle}" class="hover:opacity-80 transition-opacity">
+		<span
+			class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 mt-0.5"
+			style="background: {avatargrad(comment.authorhandle)}"
+		>
+			{initials(comment.authorname || comment.authorhandle)}
+		</span>
+	</a>
 
 	<div class="flex-1 min-w-0">
 		<!-- Author + time -->
 		<div class="flex items-center gap-2 mb-1.5">
-			<span class="text-[13px] font-medium text-[var(--p-text)]">@{comment.authorhandle}</span>
+			<a href="/profile/{comment.authorhandle}" class="text-[13px] font-medium text-[var(--p-text)] hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
+				{comment.authorname || comment.authorhandle}
+			</a>
 			<span class="text-[12.5px] text-[var(--p-text-muted)]">{timeago(comment.createdat)}</span>
 		</div>
 
@@ -114,7 +119,7 @@
 				<div class="flex-1">
 					<textarea
 						bind:value={replybody}
-						placeholder="Replying to @{comment.authorhandle}…"
+						placeholder="Replying to {comment.authorname || comment.authorhandle}…"
 						rows={2}
 						class="w-full bg-transparent border-none outline-none text-[14px] text-[var(--p-text)] placeholder:text-[var(--p-text-muted)] resize-none leading-[1.5] pt-0.5"
 					></textarea>

@@ -25,6 +25,7 @@ export const load: PageServerLoad = async ({ request, url }) => {
 			pinned: ideas.pinned,
 			authorid: ideas.authorid,
 			authorhandle: users.handle,
+			authorname: users.name,
 			createdat: ideas.createdat,
 			votes: countDistinct(votes.user),
 			comments: countDistinct(comments.id),
@@ -39,7 +40,7 @@ export const load: PageServerLoad = async ({ request, url }) => {
 		.leftJoin(comments, eq(comments.idea, ideas.id))
 		.leftJoin(tags, eq(tags.idea, ideas.id))
 		.where(and(eq(ideas.status, 'open'), tagfilter))
-		.groupBy(ideas.id, users.id, users.handle)
+		.groupBy(ideas.id, users.id, users.handle, users.name)
 		.orderBy(desc(ideas.pinned), sortexpr)
 		.limit(20);
 

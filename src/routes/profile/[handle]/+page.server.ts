@@ -21,6 +21,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 			pinned: ideas.pinned,
 			authorid: ideas.authorid,
 			authorhandle: users.handle,
+			authorname: users.name,
 			createdat: ideas.createdat,
 			votes: countDistinct(votes.user),
 			comments: countDistinct(comments.id),
@@ -33,7 +34,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 		.leftJoin(comments, eq(comments.idea, ideas.id))
 		.leftJoin(tags, eq(tags.idea, ideas.id))
 		.where(eq(ideas.authorid, profile.id))
-		.groupBy(ideas.id, users.id, users.handle)
+		.groupBy(ideas.id, users.id, users.handle, users.name)
 		.orderBy(desc(ideas.createdat));
 
 	const totallikes = posted.reduce((s, i) => s + i.votes, 0);
@@ -51,6 +52,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 				pinned: ideas.pinned,
 				authorid: ideas.authorid,
 				authorhandle: users.handle,
+				authorname: users.name,
 				createdat: ideas.createdat,
 				votes: countDistinct(votes.user),
 				comments: countDistinct(comments.id),
@@ -63,7 +65,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 			.leftJoin(comments, eq(comments.idea, ideas.id))
 			.leftJoin(tags, eq(tags.idea, ideas.id))
 			.where(eq(votes.user, me.id))
-			.groupBy(ideas.id, users.id, users.handle)
+			.groupBy(ideas.id, users.id, users.handle, users.name)
 			.orderBy(desc(ideas.createdat));
 	}
 

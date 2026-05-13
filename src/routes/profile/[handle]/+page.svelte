@@ -48,7 +48,7 @@
 			class="w-[72px] h-[72px] rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[26px] shrink-0 border border-white/[0.08]"
 			style="background: {avatargrad(profile.handle)}"
 		>
-			{initials(profile.handle)}
+			{initials(profile.name || profile.handle)}
 		</span>
 
 		<div class="flex-1 min-w-0">

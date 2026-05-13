@@ -9,6 +9,7 @@
 		body: string;
 		pinned: boolean;
 		authorhandle: string;
+		authorname: string;
 		createdat: string | Date;
 		comments: number;
 		ideatags: string[];
@@ -61,17 +62,20 @@
 	{/if}
 
 	<div class="flex items-center justify-between pt-3.5 border-t border-[var(--p-border)] mt-auto">
-		<span class="inline-flex items-center gap-2 text-[12.5px]">
+		<button
+			onclick={(e) => { e.stopPropagation(); goto(`/profile/${idea.authorhandle}`); }}
+			class="inline-flex items-center gap-2 text-[12.5px] hover:opacity-80 transition-opacity"
+		>
 			<span
 				class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[10px] border border-white/[0.08] shrink-0"
 				style="background: {avatargrad(idea.authorhandle)}"
 			>
-				{initials(idea.authorhandle)}
+				{initials(idea.authorname || idea.authorhandle)}
 			</span>
-			<span class="text-[var(--p-text)] font-medium">{idea.authorhandle}</span>
+			<span class="text-[var(--p-text)] font-medium">{idea.authorname || idea.authorhandle}</span>
 			<span class="text-[var(--p-text-muted)]">·</span>
 			<span class="text-[var(--p-text-muted)]">{timeago(idea.createdat)}</span>
-		</span>
+		</button>
 
 		<div class="inline-flex items-center gap-1">
 			<span class="inline-flex items-center gap-1.5 h-[30px] px-2.5 rounded-[var(--p-radius-pill)] text-[var(--p-text-secondary)] text-[12.5px] font-medium tabular-nums hover:text-[var(--p-text)]">

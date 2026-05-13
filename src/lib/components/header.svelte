@@ -50,7 +50,7 @@
 						class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] cursor-pointer"
 						style="background: {avatargrad(user.handle)}"
 					>
-						{initials(user.handle)}
+						{initials(user.name || user.handle)}
 					</button>
 
 					{#if menuopen}
