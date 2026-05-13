@@ -90,7 +90,7 @@
 		<div class="flex items-baseline justify-between pt-7 pb-4">
 			<span class="text-[13px] font-semibold tracking-[0.08em] uppercase text-[var(--p-text-secondary)] inline-flex items-center gap-2">
 				<Pin size={12} class="text-[var(--p-accent)]" />
-				Pinned by OSDG
+				Pinned Ideas
 			</span>
 			<span class="text-[13px] text-[var(--p-text-secondary)]">{pinned.length} ideas</span>
 		</div>
