@@ -117,14 +117,58 @@
 	--radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ── pickmeup design tokens — placed after shadcn so these win ── */
+:root {
+	--p-bg: #14090d;
+	--p-bg-elevated: #1c1014;
+	--p-bg-card: #1a0e12;
+	--p-bg-hover: #22151a;
+	--p-border: rgba(255, 200, 220, 0.07);
+	--p-border-strong: rgba(255, 200, 220, 0.12);
+	--p-border-hover: rgba(255, 130, 180, 0.22);
+	--p-text: #f7eef1;
+	--p-text-secondary: #a89aa0;
+	--p-text-muted: #6e6168;
+	--p-accent: #ff5d8f;
+	--p-accent-soft: #ff85ac;
+	--p-accent-glow: rgba(255, 93, 143, 0.35);
+	--p-accent-bg: rgba(255, 93, 143, 0.10);
+	--p-accent-bg-strong: rgba(255, 93, 143, 0.16);
+	--p-radius-pill: 999px;
+}
+
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		box-sizing: border-box;
 	}
 	body {
-		@apply bg-background text-foreground;
+		background: var(--p-bg);
+		color: var(--p-text);
+		font-family: 'Geist Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+		font-feature-settings: "ss01", "cv11";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		line-height: 1.5;
+	}
+	body::before {
+		content: "";
+		position: fixed;
+		inset: 0;
+		background:
+			radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 93, 143, 0.06), transparent 60%),
+			radial-gradient(ellipse 60% 40% at 90% 110%, rgba(255, 93, 143, 0.04), transparent 60%);
+		pointer-events: none;
+		z-index: 0;
+	}
+	::selection {
+		background: var(--p-accent-bg-strong);
+		color: var(--p-text);
 	}
 	html {
 		@apply font-sans;
 	}
+	::-webkit-scrollbar { width: 10px; height: 10px; }
+	::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 8px; border: 2px solid var(--p-bg); }
+	::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
+	::-webkit-scrollbar-track { background: transparent; }
 }
