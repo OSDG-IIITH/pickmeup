@@ -86,7 +86,7 @@
 			Post an idea
 		</h1>
 		<p class="text-[15px] text-[var(--p-text-secondary)] m-0 mb-8">
-			Tell us what you'd build. Be specific enough that someone could pick it up.
+			Please don't shitpost. And be specific enough that someone could pick it up.
 		</p>
 
 		<!-- Title field -->
@@ -96,7 +96,7 @@
 				id="title"
 				bind:value={title}
 				maxlength={titlelimit}
-				placeholder="A one-line pitch — what is it?"
+				placeholder="A one-line pitch"
 				class="w-full bg-[var(--p-bg-card)] border rounded-[14px] px-[18px] py-4 text-[22px] font-semibold tracking-[-0.015em] text-[var(--p-text)] placeholder:text-[var(--p-text-muted)] outline-none transition-[border-color,background] duration-[160ms] focus:bg-[var(--p-bg-elevated)]"
 				class:border-[var(--p-border-hover)]={fielderrors.title}
 				class:border-[var(--p-border)]={!fielderrors.title}
@@ -119,7 +119,7 @@
 				id="body"
 				bind:value={body}
 				maxlength={bodylimit}
-				placeholder="What's the problem? What's the build? Who's it for?&#10;&#10;Markdown supported."
+				placeholder="What's the problem? What's the build? Who's it for?"
 				rows={8}
 				class="w-full bg-[var(--p-bg-card)] border rounded-[14px] px-4 py-3.5 text-[15px] text-[var(--p-text)] placeholder:text-[var(--p-text-muted)] outline-none resize-y leading-[1.6] transition-[border-color,background] duration-[160ms] focus:bg-[var(--p-bg-elevated)]"
 				class:border-[var(--p-border-hover)]={fielderrors.body}
@@ -130,7 +130,7 @@
 				{#if fielderrors.body}
 					<span class="text-[12.5px] text-[var(--p-accent)]">{fielderrors.body}</span>
 				{:else}
-					<span class="text-[12.5px] text-[var(--p-text-muted)]">Aim for 80–200 words. Bullet points encouraged.</span>
+					<span class="text-[12.5px] text-[var(--p-text-muted)]">Markdown supported.</span>
 				{/if}
 				<span class="text-[12.5px] text-[var(--p-text-muted)] tabular-nums shrink-0 ml-4">{body.length}/{bodylimit}</span>
 			</div>
@@ -164,7 +164,7 @@
 				/>
 			</div>
 			<span class="block text-[12.5px] text-[var(--p-text-muted)] mt-1.5">
-				Suggested: mess, infra, social, academic, utility, hackathon, iot
+				Suggested: infra, community, social, academic, utility, fun
 			</span>
 		</div>
 

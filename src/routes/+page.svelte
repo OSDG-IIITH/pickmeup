@@ -54,7 +54,7 @@
 			Ideas worth building
 		</h1>
 		<p class="text-[var(--p-text-secondary)] text-[15px] m-0">
-			Post what you'd build if you had a weekend and a team. Upvote what should exist.
+			Have an idea but can't build it? Post it here.
 		</p>
 	</div>
 
