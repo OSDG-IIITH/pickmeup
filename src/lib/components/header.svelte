@@ -25,7 +25,7 @@
 <header
 	class="sticky top-0 z-50 border-b border-[var(--p-border)] bg-[rgba(20,9,13,0.72)] [backdrop-filter:blur(16px)_saturate(140%)]"
 >
-	<div class="w-full max-w-[1180px] mx-auto px-8 flex items-center justify-between h-16">
+	<div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex items-center justify-between h-16">
 		<!-- Brand -->
 		<a href="/" class="text-[19px] font-semibold tracking-[-0.02em] inline-flex items-center gap-2 text-[var(--p-text)]">
 			<span class="w-2 h-2 rounded-full bg-[var(--p-accent)] shadow-[0_0_12px_var(--p-accent-glow),0_0_4px_var(--p-accent)]"></span>

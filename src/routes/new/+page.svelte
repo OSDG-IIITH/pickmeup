@@ -74,7 +74,7 @@
 	}
 </script>
 
-<div class="w-full max-w-[1180px] mx-auto px-8 flex-1">
+<div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex-1">
 	<div class="max-w-[680px] mx-auto py-8">
 
 		<a href="/" class="inline-flex items-center gap-1.5 text-[13px] text-[var(--p-text-secondary)] mb-6 transition-colors duration-[120ms] hover:text-[var(--p-accent-soft)]">

@@ -40,7 +40,7 @@
 	);
 </script>
 
-<div class="w-full max-w-[1180px] mx-auto px-8 flex-1">
+<div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex-1">
 
 	<!-- Profile header -->
 	<div class="flex items-center gap-6 pt-10 pb-7 border-b border-[var(--p-border)]">
@@ -105,14 +105,12 @@
 	{#if shown.length > 0}
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-16">
 			{#each shown as idea (idea.id)}
-				<a href="/ideas/{idea.id}" class="contents">
-					<IdeaCard
-						{idea}
-						voted={getvote(idea).voted}
-						count={getvote(idea).count}
-						onvote={() => vote(idea.id)}
-					/>
-				</a>
+				<IdeaCard
+					{idea}
+					voted={getvote(idea).voted}
+					count={getvote(idea).count}
+					onvote={() => vote(idea.id)}
+				/>
 			{/each}
 		</div>
 	{:else}

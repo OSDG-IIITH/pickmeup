@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { timeago, initials, avatargrad } from '$lib/utils';
 	import { MessageSquare, Heart } from '@lucide/svelte';
 
@@ -23,7 +24,11 @@
 	let { idea, voted, count, onvote }: Props = $props();
 </script>
 
-<article
+<div
+	role="link"
+	tabindex="0"
+	onclick={() => goto(`/ideas/${idea.id}`)}
+	onkeydown={(e) => e.key === 'Enter' && goto(`/ideas/${idea.id}`)}
 	class="relative bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[14px] flex flex-col gap-3.5 cursor-pointer overflow-hidden transition-[border-color,box-shadow,background] duration-[240ms] ease-out hover:border-[rgba(255,130,180,0.16)] hover:bg-[#1e1117] hover:[box-shadow:0_0_0_1px_rgba(255,130,180,0.10),0_0_22px_2px_rgba(255,93,143,0.07),0_0_48px_6px_rgba(255,93,143,0.03)]"
 	class:pinned={idea.pinned}
 	style="padding: 22px 22px 18px"
@@ -88,7 +93,7 @@
 			</button>
 		</div>
 	</div>
-</article>
+</div>
 
 <style>
 	.pinned {

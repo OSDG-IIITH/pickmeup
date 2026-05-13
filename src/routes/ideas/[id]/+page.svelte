@@ -81,7 +81,7 @@
 	const totalcomments = $derived(comments.reduce((acc, c) => acc + 1 + c.replies.length, 0));
 </script>
 
-<div class="w-full max-w-[1180px] mx-auto px-8 flex-1">
+<div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex-1">
 	<div class="max-w-[760px] mx-auto pt-8 pb-0">
 
 		<!-- Back link -->

@@ -47,7 +47,7 @@
 	const rest = $derived(isfiltering ? data.ideas : data.ideas.filter((i) => !i.pinned));
 </script>
 
-<div class="w-full max-w-[1180px] mx-auto px-8 flex-1">
+<div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex-1">
 	<!-- Page heading -->
 	<div class="pt-10 pb-6">
 		<h1 class="text-[34px] font-semibold tracking-[-0.025em] m-0 mb-1.5 text-[var(--p-text)]">
@@ -94,16 +94,14 @@
 			</span>
 			<span class="text-[13px] text-[var(--p-text-secondary)]">{pinned.length} ideas</span>
 		</div>
-		<div class="grid grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 			{#each pinned as idea}
-				<a href="/ideas/{idea.id}" class="contents">
-					<IdeaCard
-						{idea}
-						voted={getvote(idea).voted}
-						count={getvote(idea).count}
-						onvote={() => vote(idea.id)}
-					/>
-				</a>
+				<IdeaCard
+					{idea}
+					voted={getvote(idea).voted}
+					count={getvote(idea).count}
+					onvote={() => vote(idea.id)}
+				/>
 			{/each}
 		</div>
 	{/if}
@@ -120,16 +118,14 @@
 	</div>
 
 	{#if rest.length > 0}
-		<div class="grid grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 			{#each rest as idea}
-				<a href="/ideas/{idea.id}" class="contents">
-					<IdeaCard
-						{idea}
-						voted={getvote(idea).voted}
-						count={getvote(idea).count}
-						onvote={() => vote(idea.id)}
-					/>
-				</a>
+				<IdeaCard
+					{idea}
+					voted={getvote(idea).voted}
+					count={getvote(idea).count}
+					onvote={() => vote(idea.id)}
+				/>
 			{/each}
 		</div>
 	{:else}
