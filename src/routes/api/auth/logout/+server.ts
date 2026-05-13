@@ -1,6 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { getIronSession } from 'iron-session';
-import { sessionoptions, casurl } from '$lib/server/auth';
+import { sessionoptions } from '$lib/server/auth';
 
 export const GET: RequestHandler = async ({ request }) => {
 	const res = new Response();
@@ -8,7 +8,7 @@ export const GET: RequestHandler = async ({ request }) => {
 	session.destroy();
 	await session.save();
 
-	const headers = new Headers({ Location: `${casurl}/logout` });
+	const headers = new Headers({ Location: '/' });
 	headers.append('Set-Cookie', res.headers.get('Set-Cookie')!);
 	return new Response(null, { status: 302, headers });
 };
