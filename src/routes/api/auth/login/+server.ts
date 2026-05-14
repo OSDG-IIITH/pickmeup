@@ -1,8 +1,10 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
-import { casurl } from '$lib/server/auth';
+import { casurl, casserviceurl } from '$lib/server/auth';
+import { base } from '$app/paths';
 
 export const GET: RequestHandler = ({ url }) => {
-	const service = encodeURIComponent(`${url.origin}/api/auth/login/callback`);
+	const serviceUrl = casserviceurl || `${url.origin}${base}/api/auth/login/callback`;
+	const service = encodeURIComponent(serviceUrl);
 	return redirect(302, `${casurl}/login?service=${service}`);
 };

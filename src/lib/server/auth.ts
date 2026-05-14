@@ -16,6 +16,7 @@ if (!env.SESSION_SECRET) throw new Error('SESSION_SECRET is not set');
 if (!env.CAS_URL) throw new Error('CAS_URL is not set');
 
 export const casurl = env.CAS_URL;
+export const casserviceurl = env.CAS_SERVICE_URL;
 
 export const sessionoptions = {
 	password: env.SESSION_SECRET,

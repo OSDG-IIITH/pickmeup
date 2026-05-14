@@ -4,18 +4,20 @@ import { ulid } from 'ulid';
 import { env } from '$env/dynamic/private';
 import { db } from '$lib/server/db';
 import { users } from '$lib/server/db/schema';
-import { sessionoptions, casurl, type SessionUser } from '$lib/server/auth';
+import { sessionoptions, casurl, casserviceurl, type SessionUser } from '$lib/server/auth';
+import { base } from '$app/paths';
 
 export const GET: RequestHandler = async ({ url, request }) => {
 	const ticket = url.searchParams.get('ticket');
-	if (!ticket) return new Response(null, { status: 302, headers: { Location: '/' } });
+	if (!ticket) return new Response(null, { status: 302, headers: { Location: `${base}/` } });
 
-	const service = encodeURIComponent(`${url.origin}/api/auth/login/callback`);
+	const serviceUrl = casserviceurl || `${url.origin}${base}/api/auth/login/callback`;
+	const service = encodeURIComponent(serviceUrl);
 	const validateurl = `${casurl}/serviceValidate?service=${service}&ticket=${ticket}&format=JSON`;
 
 	const data = await fetch(validateurl).then((r) => r.json());
 	const success = data?.serviceResponse?.authenticationSuccess;
-	if (!success) return new Response(null, { status: 302, headers: { Location: '/' } });
+	if (!success) return new Response(null, { status: 302, headers: { Location: `${base}/` } });
 
 	const attrs = success.attributes;
 	const handle: string = attrs.uid?.[0] ?? success.user;
