@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { z } from 'zod';
 	import { ArrowLeft, X } from '@lucide/svelte';
 
@@ -59,14 +60,14 @@
 		if (!result.success) return;
 
 		submitting = true;
-		const res = await fetch('/api/ideas', {
+		const res = await fetch(`${base}/api/ideas`, {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ title: title.trim(), body: body.trim(), tags })
 		});
 		if (res.ok) {
 			const { id } = await res.json();
-			goto(`/ideas/${id}`);
+			goto(`${base}/ideas/${id}`);
 		} else {
 			apierror = 'Something went wrong. Please try again.';
 			submitting = false;
@@ -77,7 +78,7 @@
 <div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex-1">
 	<div class="max-w-[680px] mx-auto py-8">
 
-		<a href="/" class="inline-flex items-center gap-1.5 text-[13px] text-[var(--p-text-secondary)] mb-6 transition-colors duration-[120ms] hover:text-[var(--p-accent-soft)]">
+		<a href={`${base}/`} class="inline-flex items-center gap-1.5 text-[13px] text-[var(--p-text-secondary)] mb-6 transition-colors duration-[120ms] hover:text-[var(--p-accent-soft)]">
 			<ArrowLeft size={14} />
 			<span>Cancel</span>
 		</a>
@@ -181,7 +182,7 @@
 			{/if}
 			<div class="flex items-center gap-2.5 ml-auto">
 				<a
-					href="/"
+					href={`${base}/`}
 					class="inline-flex items-center h-9 px-3.5 rounded-[var(--p-radius-pill)] border border-[var(--p-border)] text-[var(--p-text-secondary)] text-[13.5px] font-medium transition-all duration-[120ms] hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)] hover:bg-[var(--p-bg-hover)]"
 				>
 					Save draft

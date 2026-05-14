@@ -3,6 +3,7 @@
 	import { initials, avatargrad, timeago } from '$lib/utils';
 	import { Heart, CornerDownRight } from '@lucide/svelte';
 	import Comment from './comment.svelte';
+	import { base } from '$app/paths';
 
 	interface CommentData {
 		id: string;
@@ -35,7 +36,7 @@
 
 	async function vote() {
 		if (!user) return;
-		const res = await fetch(`/api/comments/${comment.id}/vote`, { method: 'POST' });
+		const res = await fetch(`${base}/api/comments/${comment.id}/vote`, { method: 'POST' });
 		if (res.ok) {
 			const v = await res.json();
 			voted = v.voted;
@@ -46,7 +47,7 @@
 	async function submitreply() {
 		if (!replybody.trim() || posting || !user) return;
 		posting = true;
-		const res = await fetch(`/api/ideas/${ideaid}/comments`, {
+		const res = await fetch(`${base}/api/ideas/${ideaid}/comments`, {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ body: replybody.trim(), parent: comment.id })
@@ -62,7 +63,7 @@
 </script>
 
 <div class="flex gap-3 py-4">
-	<a href="/profile/{comment.authorhandle}" class="hover:opacity-80 transition-opacity">
+	<a href={`${base}/profile/${comment.authorhandle}`} class="hover:opacity-80 transition-opacity">
 		<span
 			class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 mt-0.5"
 			style="background: {avatargrad(comment.authorhandle)}"
@@ -74,7 +75,7 @@
 	<div class="flex-1 min-w-0">
 		<!-- Author + time -->
 		<div class="flex items-center gap-2 mb-1.5">
-			<a href="/profile/{comment.authorhandle}" class="text-[13px] font-medium text-[var(--p-text)] hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
+			<a href={`${base}/profile/${comment.authorhandle}`} class="text-[13px] font-medium text-[var(--p-text)] hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
 				{comment.authorname || comment.authorhandle}
 			</a>
 			<span class="text-[12.5px] text-[var(--p-text-muted)]">{timeago(comment.createdat)}</span>

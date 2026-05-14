@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { initials, avatargrad, timeago } from '$lib/utils';
 	import { ArrowLeft, Heart, MessageSquare, Share2, Pin } from '@lucide/svelte';
 	import Comment from '$lib/components/comment.svelte';
@@ -18,8 +19,8 @@
 	let posting = $state(false);
 
 	async function vote() {
-		if (!user) { goto('/api/auth/login'); return; }
-		const res = await fetch(`/api/ideas/${idea.id}/vote`, { method: 'POST' });
+		if (!user) { goto(`${base}/api/auth/login`); return; }
+		const res = await fetch(`${base}/api/ideas/${idea.id}/vote`, { method: 'POST' });
 		if (res.ok) {
 			const v = await res.json();
 			voted = v.voted;
@@ -30,7 +31,7 @@
 	async function postcomment() {
 		if (!commentbody.trim() || posting) return;
 		posting = true;
-		const res = await fetch(`/api/ideas/${idea.id}/comments`, {
+		const res = await fetch(`${base}/api/ideas/${idea.id}/comments`, {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ body: commentbody.trim() })
@@ -87,7 +88,7 @@
 	<div class="max-w-[760px] mx-auto pt-8 pb-0">
 
 		<!-- Back link -->
-		<a href="/" class="inline-flex items-center gap-1.5 text-[13px] text-[var(--p-text-secondary)] mb-6 transition-colors duration-[120ms] hover:text-[var(--p-accent-soft)]">
+		<a href={`${base}/`} class="inline-flex items-center gap-1.5 text-[13px] text-[var(--p-text-secondary)] mb-6 transition-colors duration-[120ms] hover:text-[var(--p-accent-soft)]">
 			<ArrowLeft size={14} />
 			<span>Back to ideas</span>
 		</a>
@@ -116,12 +117,12 @@
 
 		<!-- Author meta -->
 		<div class="flex items-center gap-3 pb-6 mb-6 border-b border-[var(--p-border)]">
-			<a href="/profile/{idea.authorhandle}" class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 hover:opacity-80 transition-opacity" style="background: {avatargrad(idea.authorhandle)}">
+			<a href={`${base}/profile/${idea.authorhandle}`} class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 hover:opacity-80 transition-opacity" style="background: {avatargrad(idea.authorhandle)}">
 				{initials(idea.authorname || idea.authorhandle)}
 			</a>
 			<div>
 				<div class="text-[14px] font-medium text-[var(--p-text)]">
-					<a href="/profile/{idea.authorhandle}" class="hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
+					<a href={`${base}/profile/${idea.authorhandle}`} class="hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
 						{idea.authorname || idea.authorhandle}
 					</a>
 				</div>
@@ -204,7 +205,7 @@
 		{:else}
 			<div class="p-4 bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[14px] mb-7 text-center">
 				<span class="text-[14px] text-[var(--p-text-secondary)]">
-					<a href="/api/auth/login" class="text-[var(--p-accent-soft)] hover:underline">Sign in</a> to join the discussion
+					<a href={`${base}/api/auth/login`} class="text-[var(--p-accent-soft)] hover:underline">Sign in</a> to join the discussion
 				</span>
 			</div>
 		{/if}

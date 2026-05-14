@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { initials, avatargrad } from '$lib/utils';
 	import { User, Plus, LogOut } from '@lucide/svelte';
+	import { base } from '$app/paths';
 
 	interface Props {
 		user: { handle: string; name: string; role: string } | null;
@@ -27,7 +28,7 @@
 >
 	<div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex items-center justify-between h-16">
 		<!-- Brand -->
-		<a href="/" class="text-[19px] font-semibold tracking-[-0.02em] inline-flex items-center gap-2 text-[var(--p-text)]">
+		<a href={`${base}/`} class="text-[19px] font-semibold tracking-[-0.02em] inline-flex items-center gap-2 text-[var(--p-text)]">
 			<span class="w-2 h-2 rounded-full bg-[var(--p-accent)] shadow-[0_0_12px_var(--p-accent-glow),0_0_4px_var(--p-accent)]"></span>
 			<span>pickmeup</span>
 		</a>
@@ -36,7 +37,7 @@
 		<div class="flex items-center gap-3">
 			{#if user}
 				<a
-					href="/new"
+					href={`${base}/new`}
 					class="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-[var(--p-radius-pill)] border border-[var(--p-border)] text-[var(--p-text-secondary)] text-[13.5px] font-medium transition-all duration-[120ms] hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)] hover:bg-[var(--p-bg-hover)]"
 				>
 					<Plus size={14} />
@@ -63,7 +64,7 @@
 								<div class="text-[var(--p-text-secondary)] text-[12.5px] mt-0.5">@{user.handle}</div>
 							</div>
 							<a
-								href="/profile/{user.handle}"
+								href={`${base}/profile/${user.handle}`}
 								onclick={() => (menuopen = false)}
 								class="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-[13.5px] text-[var(--p-text-secondary)] transition-all duration-100 hover:bg-[var(--p-bg-hover)] hover:text-[var(--p-text)]"
 							>
@@ -71,7 +72,7 @@
 							</a>
 							<div class="h-px bg-[var(--p-border)] my-1.5"></div>
 							<a
-								href="/api/auth/logout"
+								href={`${base}/api/auth/logout`}
 								class="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-[13.5px] text-[var(--p-text-secondary)] transition-all duration-100 hover:bg-[var(--p-bg-hover)] hover:text-[var(--p-text)]"
 							>
 								<LogOut size={14} /><span>Sign out</span>
@@ -81,7 +82,7 @@
 				</div>
 			{:else}
 				<a
-					href="/api/auth/login"
+					href={`${base}/api/auth/login`}
 					class="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13.5px] tracking-[-0.005em] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)] hover:shadow-[0_0_24px_-2px_var(--p-accent-glow)] active:translate-y-px"
 				>
 					Sign in
