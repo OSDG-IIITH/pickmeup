@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import IdeaCard from '$lib/components/ideacard.svelte';
 	import { Pin, Sparkles } from '@lucide/svelte';
@@ -13,7 +14,7 @@
 	}
 
 	async function vote(id: string) {
-		const res = await fetch(`/api/ideas/${id}/vote`, { method: 'POST' });
+		const res = await fetch(`${base}/api/ideas/${id}/vote`, { method: 'POST' });
 		if (res.ok) {
 			const v = await res.json();
 			votemap[id] = v;
