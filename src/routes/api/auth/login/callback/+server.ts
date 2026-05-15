@@ -40,7 +40,7 @@ export const GET: RequestHandler = async ({ url, request }) => {
 	session.user = sessionuser;
 	await session.save();
 
-	const headers = new Headers({ Location: '/' });
+const headers = new Headers({ Location: `${base}/` });
 	headers.append('Set-Cookie', res.headers.get('Set-Cookie')!);
 	return new Response(null, { status: 302, headers });
 };
