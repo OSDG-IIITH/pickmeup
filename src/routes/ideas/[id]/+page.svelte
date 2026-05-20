@@ -161,9 +161,7 @@
 		<div class="flex items-center gap-2.5 py-[18px] border-t border-b border-[var(--p-border)] mb-8">
 			<button
 				onclick={vote}
-				class="inline-flex items-center gap-1.5 h-[38px] px-3.5 pl-3 rounded-[var(--p-radius-pill)] border text-[13.5px] font-semibold tabular-nums transition-all duration-[140ms]"
-				class:upvote-active={voted}
-				class:upvote-inactive={!voted}
+				class="inline-flex items-center gap-1.5 h-[38px] px-3.5 pl-3 rounded-[var(--p-radius-pill)] border text-[13.5px] font-semibold tabular-nums transition-all duration-[140ms] {voted ? 'text-[var(--p-accent)] border-transparent bg-[var(--p-accent-bg-strong)] shadow-[inset_0_0_0_1px_var(--p-border-hover),_0_0_16px_-4px_var(--p-accent-glow)]' : 'text-[var(--p-text-secondary)] border-[var(--p-border)] bg-transparent hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]'}"
 			>
 				<Heart
 					size={14}
@@ -190,9 +188,7 @@
 				<div class="flex items-center gap-2 ml-auto">
 					<button
 						onclick={togglepin}
-						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border text-[13.5px] font-medium transition-all duration-[120ms]"
-						class:pin-active={pinned}
-						class:pin-inactive={!pinned}
+						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border text-[13.5px] font-medium transition-all duration-[120ms] {pinned ? 'text-[var(--p-accent)] border-[var(--p-border-hover)] bg-[var(--p-accent-bg)]' : 'text-[var(--p-text-muted)] border-[var(--p-border)] bg-transparent hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]'}"
 					>
 						{#if pinned}
 							<PinOff size={14} />
@@ -277,34 +273,3 @@
 	</div>
 </div>
 
-<style>
-	.upvote-active {
-		color: var(--p-accent);
-		border-color: transparent;
-		background: var(--p-accent-bg-strong);
-		box-shadow: inset 0 0 0 1px var(--p-border-hover), 0 0 16px -4px var(--p-accent-glow);
-	}
-	.upvote-inactive {
-		color: var(--p-text-secondary);
-		border-color: var(--p-border);
-		background: transparent;
-	}
-	.upvote-inactive:hover {
-		color: var(--p-text);
-		border-color: var(--p-border-strong);
-	}
-	.pin-active {
-		color: var(--p-accent);
-		border-color: var(--p-border-hover);
-		background: var(--p-accent-bg);
-	}
-	.pin-inactive {
-		color: var(--p-text-muted);
-		border-color: var(--p-border);
-		background: transparent;
-	}
-	.pin-inactive:hover {
-		color: var(--p-text);
-		border-color: var(--p-border-strong);
-	}
-</style>

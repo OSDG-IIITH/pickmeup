@@ -113,8 +113,7 @@
 		<div class="flex items-center gap-3.5 text-[12.5px] text-[var(--p-text-muted)]">
 			<button
 				onclick={vote}
-				class="inline-flex items-center gap-1 transition-colors duration-[120ms] hover:text-[var(--p-text)]"
-				class:action-voted={voted}
+				class="inline-flex items-center gap-1 transition-colors duration-[120ms] {voted ? 'text-[var(--p-accent)]' : 'hover:text-[var(--p-text)]'}"
 			>
 				<Heart size={12} fill={voted ? 'currentColor' : 'none'} />
 				<span>{votecount}</span>
@@ -186,8 +185,3 @@
 	</div>
 </div>
 
-<style>
-	.action-voted {
-		color: var(--p-accent);
-	}
-</style>
