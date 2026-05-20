@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { initials, avatargrad, timeago } from '$lib/utils';
-	import { ArrowLeft, Heart, MessageSquare, Share2, Pin } from '@lucide/svelte';
+	import { ArrowLeft, Heart, MessageSquare, Share2, Pin, PinOff, Trash2 } from '@lucide/svelte';
+	import { goto } from '$app/navigation';
 	import Comment from '$lib/components/comment.svelte';
 
 	let { data } = $props();
@@ -13,6 +13,7 @@
 
 	let voted = $state(untrack(() => data.idea.voted ?? false));
 	let votecount = $state(untrack(() => data.idea.votes));
+	let pinned = $state(untrack(() => data.idea.pinned));
 
 	let comments = $state(untrack(() => data.comments));
 	let commentbody = $state('');
@@ -82,6 +83,23 @@
 	}
 
 	const totalcomments = $derived(comments.reduce((acc, c) => acc + 1 + c.replies.length, 0));
+
+	async function togglepin() {
+		const res = await fetch(`${base}/api/ideas/${idea.id}/pin`, { method: 'PATCH' });
+		if (res.ok) {
+			const v = await res.json();
+			pinned = v.pinned;
+		}
+	}
+
+	async function deleteidea() {
+		const res = await fetch(`${base}/api/ideas/${idea.id}`, { method: 'DELETE' });
+		if (res.ok) goto(`${base}/`);
+	}
+
+	function deletecomment(id: string) {
+		comments = comments.filter((c) => c.id !== id);
+	}
 </script>
 
 <div class="w-full max-w-[1180px] mx-auto px-4 sm:px-8 flex-1">
@@ -94,14 +112,14 @@
 		</a>
 
 		<!-- Tags -->
-		{#if idea.tags.length > 0 || idea.pinned}
+		{#if idea.tags.length > 0 || pinned}
 			<div class="flex flex-wrap gap-1.5 mb-3.5">
 				{#each idea.tags as tag (tag)}
 					<span class="text-[11.5px] font-medium text-[var(--p-text-secondary)] bg-white/[0.025] border border-[var(--p-border)] px-[9px] py-[3px] rounded-[var(--p-radius-pill)]">
 						#{tag}
 					</span>
 				{/each}
-				{#if idea.pinned}
+				{#if pinned}
 					<span class="text-[11.5px] font-medium text-[var(--p-accent)] bg-[var(--p-accent-bg)] border border-[var(--p-border-hover)] px-[9px] py-[3px] rounded-[var(--p-radius-pill)] inline-flex items-center gap-1">
 						<Pin size={10} />
 						Pinned
@@ -167,6 +185,32 @@
 				<Share2 size={14} />
 				<span>Share</span>
 			</button>
+
+			{#if user?.role === 'moderator'}
+				<div class="flex items-center gap-2 ml-auto">
+					<button
+						onclick={togglepin}
+						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border text-[13.5px] font-medium transition-all duration-[120ms]"
+						class:pin-active={pinned}
+						class:pin-inactive={!pinned}
+					>
+						{#if pinned}
+							<PinOff size={14} />
+							<span>Unpin</span>
+						{:else}
+							<Pin size={14} />
+							<span>Pin</span>
+						{/if}
+					</button>
+					<button
+						onclick={deleteidea}
+						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border border-[var(--p-border)] text-[var(--p-text-muted)] text-[13.5px] font-medium transition-all duration-[120ms] hover:text-red-400 hover:border-red-400/30"
+					>
+						<Trash2 size={14} />
+						<span>Delete</span>
+					</button>
+				</div>
+			{/if}
 		</div>
 
 		<!-- Comments section -->
@@ -219,6 +263,7 @@
 						ideaid={idea.id}
 						{user}
 						onreply={(reply) => onreply(comment.id, reply)}
+						ondelete={() => deletecomment(comment.id)}
 					/>
 				{/each}
 			</div>
@@ -245,6 +290,20 @@
 		background: transparent;
 	}
 	.upvote-inactive:hover {
+		color: var(--p-text);
+		border-color: var(--p-border-strong);
+	}
+	.pin-active {
+		color: var(--p-accent);
+		border-color: var(--p-border-hover);
+		background: var(--p-accent-bg);
+	}
+	.pin-inactive {
+		color: var(--p-text-muted);
+		border-color: var(--p-border);
+		background: transparent;
+	}
+	.pin-inactive:hover {
 		color: var(--p-text);
 		border-color: var(--p-border-strong);
 	}

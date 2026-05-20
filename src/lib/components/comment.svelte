@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { initials, avatargrad, timeago } from '$lib/utils';
-	import { Heart, CornerDownRight } from '@lucide/svelte';
+	import { Heart, CornerDownRight, Trash2 } from '@lucide/svelte';
 	import Comment from './comment.svelte';
 	import { base } from '$app/paths';
 
@@ -21,18 +21,29 @@
 	interface Props {
 		comment: CommentData;
 		ideaid: string;
-		user: { id: string; handle: string; name: string } | null;
+		user: { id: string; handle: string; name: string; role: string } | null;
 		onreply?: (reply: { id: string; body: string }) => void;
+		ondelete?: () => void;
 		depth?: number;
 	}
 
-	let { comment, ideaid, user, onreply, depth = 0 }: Props = $props();
+	let { comment, ideaid, user, onreply, ondelete, depth = 0 }: Props = $props();
 
 	let voted = $state(untrack(() => comment.voted ?? false));
 	let votecount = $state(untrack(() => comment.votes));
 	let showreply = $state(false);
 	let replybody = $state('');
 	let posting = $state(false);
+	let replies = $state(untrack(() => comment.replies ?? []));
+
+	async function deleteit() {
+		const res = await fetch(`${base}/api/comments/${comment.id}`, { method: 'DELETE' });
+		if (res.ok) ondelete?.();
+	}
+
+	function removereply(id: string) {
+		replies = replies.filter((r) => r.id !== id);
+	}
 
 	async function vote() {
 		if (!user) return;
@@ -54,6 +65,18 @@
 		});
 		if (res.ok) {
 			const { id } = await res.json();
+			const newreply = {
+				id,
+				authorid: user!.id,
+				authorhandle: user!.handle,
+				authorname: user!.name,
+				parent: comment.id,
+				body: replybody.trim(),
+				createdat: new Date(),
+				votes: 0,
+				voted: false
+			};
+			replies = [...replies, newreply];
 			onreply?.({ id, body: replybody.trim() });
 			replybody = '';
 			showreply = false;
@@ -106,6 +129,15 @@
 					<span>Reply</span>
 				</button>
 			{/if}
+
+			{#if user?.role === 'moderator'}
+				<button
+					onclick={deleteit}
+					class="inline-flex items-center gap-1 transition-colors duration-[120ms] hover:text-red-400"
+				>
+					<Trash2 size={12} />
+				</button>
+			{/if}
 		</div>
 
 		<!-- Reply composer -->
@@ -144,10 +176,10 @@
 		{/if}
 
 		<!-- Nested replies -->
-		{#if comment.replies && comment.replies.length > 0}
+		{#if replies.length > 0}
 			<div class="ml-4 pl-4 border-l border-[var(--p-border)] mt-1">
-				{#each comment.replies as reply (reply.id)}
-					<Comment comment={reply} {ideaid} {user} depth={1} />
+				{#each replies as reply (reply.id)}
+					<Comment comment={reply} {ideaid} {user} depth={1} ondelete={() => removereply(reply.id)} />
 				{/each}
 			</div>
 		{/if}
