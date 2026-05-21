@@ -129,7 +129,7 @@
 				</button>
 			{/if}
 
-			{#if user?.role === 'moderator'}
+			{#if user?.role === 'moderator' || user?.id === comment.authorid}
 				<button
 					onclick={deleteit}
 					class="inline-flex items-center gap-1 transition-colors duration-[120ms] hover:text-red-400"

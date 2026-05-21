@@ -184,8 +184,9 @@
 				<span>Share</span>
 			</button>
 
-			{#if user?.role === 'moderator'}
+			{#if user?.role === 'moderator' || user?.id === idea.authorid}
 				<div class="flex items-center gap-2 ml-auto">
+					{#if user?.role === 'moderator'}
 					<button
 						onclick={togglepin}
 						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border text-[13.5px] font-medium transition-all duration-[120ms] {pinned ? 'text-[var(--p-accent)] border-[var(--p-border-hover)] bg-[var(--p-accent-bg)]' : 'text-[var(--p-text-muted)] border-[var(--p-border)] bg-transparent hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]'}"
@@ -198,6 +199,7 @@
 							<span>Pin</span>
 						{/if}
 					</button>
+					{/if}
 					<button
 						onclick={deleteidea}
 						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border border-[var(--p-border)] text-[var(--p-text-muted)] text-[13.5px] font-medium transition-all duration-[120ms] hover:text-red-400 hover:border-red-400/30"
