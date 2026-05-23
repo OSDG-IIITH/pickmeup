@@ -4,6 +4,7 @@
 	import { Heart, CornerDownRight, Trash2 } from '@lucide/svelte';
 	import Comment from './comment.svelte';
 	import { base } from '$app/paths';
+	import { rendermd } from '$lib/markdown';
 
 	interface CommentData {
 		id: string;
@@ -105,9 +106,9 @@
 		</div>
 
 		<!-- Body -->
-		<p class="text-[14.5px] leading-[1.55] text-[var(--p-text)] m-0 mb-2 text-pretty whitespace-pre-wrap">
-			{comment.body}
-		</p>
+		<div class="prose text-[14.5px] mb-2">
+			{@html rendermd(comment.body)}
+		</div>
 
 		<!-- Actions -->
 		<div class="flex items-center gap-3.5 text-[12.5px] text-[var(--p-text-muted)]">

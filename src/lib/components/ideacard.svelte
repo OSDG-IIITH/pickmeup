@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 	import { timeago, initials, avatargrad } from '$lib/utils';
 	import { MessageSquare, Heart } from '@lucide/svelte';
+	import { stripmd } from '$lib/markdown';
 
 	interface Idea {
 		id: string;
@@ -49,7 +50,7 @@
 	</h3>
 
 	<p class="text-[var(--p-text-secondary)] text-[14px] leading-[1.55] m-0 line-clamp-3">
-		{idea.body}
+		{stripmd(idea.body)}
 	</p>
 
 	{#if idea.ideatags?.length > 0}

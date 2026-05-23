@@ -5,6 +5,7 @@
 	import { ArrowLeft, Heart, MessageSquare, Share2, Pin, PinOff, Trash2 } from '@lucide/svelte';
 	import { goto } from '$app/navigation';
 	import Comment from '$lib/components/comment.svelte';
+	import { rendermd } from '$lib/markdown';
 
 	let { data } = $props();
 
@@ -153,9 +154,9 @@
 		</div>
 
 		<!-- Body -->
-		<p class="text-[16px] leading-[1.7] text-[var(--p-text)] m-0 mb-8 text-pretty whitespace-pre-wrap">
-			{idea.body}
-		</p>
+		<div class="prose text-[16px] mb-8">
+			{@html rendermd(idea.body)}
+		</div>
 
 		<!-- Actions -->
 		<div class="flex items-center gap-2.5 py-[18px] border-t border-b border-[var(--p-border)] mb-8">

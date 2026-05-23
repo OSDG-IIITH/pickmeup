@@ -30,6 +30,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^24",
+    "@types/sanitize-html": "^2.16.1",
     "bits-ui": "^2.16.3",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.31.10",
@@ -58,6 +59,8 @@
   },
   "dependencies": {
     "iron-session": "^8.0.4",
+    "marked": "^18.0.4",
+    "sanitize-html": "^2.17.4",
     "ulid": "^3.0.2",
     "zod": "^4.4.3"
   }
