@@ -229,12 +229,12 @@
 				<div class="flex-1">
 					<textarea
 						bind:value={commentbody}
-						placeholder="Share what you'd build, what blockers you'd hit, who you'd bring on…"
+						placeholder="Add a comment…"
 						rows={3}
+						onkeydown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); postcomment(); } }}
 						class="w-full bg-transparent border-none outline-none text-[14px] text-[var(--p-text)] placeholder:text-[var(--p-text-muted)] resize-none leading-[1.5] pt-1"
 					></textarea>
-					<div class="flex justify-between items-center mt-2">
-						<span class="text-[12px] text-[var(--p-text-muted)]">Markdown supported</span>
+					<div class="flex justify-end items-center mt-2">
 						<button
 							onclick={postcomment}
 							disabled={!commentbody.trim() || posting}

@@ -154,6 +154,7 @@
 						bind:value={replybody}
 						placeholder="Replying to {comment.authorname || comment.authorhandle}…"
 						rows={2}
+						onkeydown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitreply(); } }}
 						class="w-full bg-transparent border-none outline-none text-[14px] text-[var(--p-text)] placeholder:text-[var(--p-text-muted)] resize-none leading-[1.5] pt-0.5"
 					></textarea>
 					<div class="flex justify-end items-center gap-2 mt-1.5">
