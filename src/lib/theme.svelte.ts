@@ -8,7 +8,7 @@ export const themes = [
 ];
 
 function createtheme() {
-	let current = $state<Theme>('dark');
+	let current = $state<Theme>('ocean');
 
 	function apply(t: Theme) {
 		current = t;
@@ -24,9 +24,9 @@ function createtheme() {
 		init() {
 			try {
 				const saved = localStorage.getItem('theme') as Theme | null;
-				const valid: Theme[] = ['valentine', 'mint', 'ocean'];
-			apply(valid.includes(saved as Theme) ? saved as Theme : 'dark');
-			} catch { apply('dark'); }
+				const valid: Theme[] = ['dark', 'valentine', 'mint', 'ocean'];
+				apply(saved && valid.includes(saved) ? saved : 'ocean');
+			} catch { apply('ocean'); }
 		}
 	};
 }
