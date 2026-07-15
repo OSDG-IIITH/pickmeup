@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 	import { initials, avatargrad, timeago } from '$lib/utils';
 	import { theme } from '$lib/theme.svelte';
-	import { ArrowLeft, Share2, Trash2 } from '@lucide/svelte';
+	import { ArrowLeft, Share2, Trash2, Pencil } from '@lucide/svelte';
 	import Heart from '@tabler/icons-svelte/icons/heart';
 	import HeartFilled from '@tabler/icons-svelte/icons/heart-filled';
 	import IconPinFilled from '@tabler/icons-svelte/icons/pin-filled';
@@ -25,6 +25,32 @@
 	let comments = $state(untrack(() => data.comments));
 	let commentbody = $state('');
 	let posting = $state(false);
+
+	let ideatitle = $state(untrack(() => data.idea.title));
+	let ideabody = $state(untrack(() => data.idea.body));
+	let ideaupdatedat = $state(untrack(() => data.idea.updatedat));
+
+	let editmode = $state(false);
+	let edittitle = $state('');
+	let editbody = $state('');
+	let saving = $state(false);
+
+	async function saveedit() {
+		if (!edittitle.trim() || !editbody.trim() || saving) return;
+		saving = true;
+		const res = await fetch(`${base}/api/ideas/${idea.id}`, {
+			method: 'PATCH',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ title: edittitle.trim(), body: editbody.trim() })
+		});
+		if (res.ok) {
+			ideatitle = edittitle.trim();
+			ideabody = editbody.trim();
+			ideaupdatedat = new Date();
+			editmode = false;
+		}
+		saving = false;
+	}
 
 	async function vote() {
 		if (!user) { goto(`${base}/api/auth/login`); return; }
@@ -56,6 +82,7 @@
 					parent: null,
 					body: commentbody.trim(),
 					createdat: new Date(),
+					updatedat: null,
 					votes: 0,
 					voted: false,
 					replies: []
@@ -81,6 +108,7 @@
 						parent: parentid,
 						body: reply.body,
 						createdat: new Date(),
+						updatedat: null,
 						votes: 0,
 						voted: false
 					}
@@ -136,9 +164,18 @@
 		{/if}
 
 		<!-- Title -->
-		<h1 class="text-[36px] font-semibold tracking-[-0.03em] leading-[1.15] m-0 mb-[18px] text-[var(--p-text)] text-balance">
-			{idea.title}
-		</h1>
+		{#if editmode}
+			<input
+				type="text"
+				bind:value={edittitle}
+				class="w-full bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[10px] px-4 py-2 text-[28px] font-semibold text-[var(--p-text)] mb-[18px] focus:border-[var(--p-border-hover)] outline-none"
+				placeholder="Title"
+			/>
+		{:else}
+			<h1 class="text-[36px] font-semibold tracking-[-0.03em] leading-[1.15] m-0 mb-[18px] text-[var(--p-text)] text-balance">
+				{ideatitle}
+			</h1>
+		{/if}
 
 		<!-- Author meta -->
 		<div class="flex items-center gap-3 pb-6 mb-6 border-b border-[var(--p-border)]">
@@ -151,18 +188,46 @@
 						{idea.authorname || idea.authorhandle}
 					</a>
 				</div>
-				<div class="text-[12.5px] text-[var(--p-text-muted)]">
-					@{idea.authorhandle}
-					<span class="mx-1">·</span>
-					posted {timeago(idea.createdat)}
+				<div class="text-[12.5px] text-[var(--p-text-muted)] flex items-center gap-1">
+					<span>@{idea.authorhandle}</span>
+					<span class="mx-0.5">·</span>
+					<span>posted {timeago(idea.createdat)}</span>
+					{#if ideaupdatedat}
+						<span class="mx-0.5">·</span>
+						<span class="text-[11.5px] italic text-[var(--p-text-muted)]">edited {timeago(ideaupdatedat)}</span>
+					{/if}
 				</div>
 			</div>
 		</div>
 
 		<!-- Body -->
-		<div class="prose text-[16px] mb-8">
-			{@html rendermd(idea.body)}
-		</div>
+		{#if editmode}
+			<textarea
+				bind:value={editbody}
+				rows={10}
+				class="w-full bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[10px] px-4 py-3 text-[16px] text-[var(--p-text)] resize-none leading-[1.5] focus:border-[var(--p-border-hover)] outline-none mb-4"
+				placeholder="Write your post..."
+			></textarea>
+			<div class="flex justify-end gap-2 mb-8">
+				<button
+					onclick={() => { editmode = false; }}
+					class="inline-flex items-center h-9 px-4 rounded-[var(--p-radius-pill)] text-[var(--p-text-secondary)] text-[13px] font-semibold border border-[var(--p-border)] hover:bg-[var(--p-bg-hover)]"
+				>
+					Cancel
+				</button>
+				<button
+					onclick={saveedit}
+					disabled={!edittitle.trim() || !editbody.trim() || saving}
+					class="inline-flex items-center h-9 px-4 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13px] hover:bg-[var(--p-accent-soft)] disabled:opacity-40"
+				>
+					Save
+				</button>
+			</div>
+		{:else}
+			<div class="prose text-[16px] mb-8">
+				{@html rendermd(ideabody)}
+			</div>
+		{/if}
 
 		<!-- Actions -->
 		<div class="flex items-center gap-2.5 py-[18px] border-t border-b border-[var(--p-border)] mb-8">
@@ -205,6 +270,15 @@
 							<IconPinFilled size={14} />
 							<span>Pin</span>
 						{/if}
+					</button>
+					{/if}
+					{#if user?.id === idea.authorid}
+					<button
+						onclick={() => { editmode = true; edittitle = ideatitle; editbody = ideabody; }}
+						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border border-[var(--p-border)] text-[var(--p-text-muted)] text-[13.5px] font-medium transition-all duration-[120ms] hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]"
+					>
+						<Pencil size={14} />
+						<span>Edit</span>
 					</button>
 					{/if}
 					<button

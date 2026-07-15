@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 			authorhandle: users.handle,
 			authorname: users.name,
 			createdat: ideas.createdat,
+			updatedat: ideas.updatedat,
 			votes: count(votes.user),
 			voted: user ? sql<boolean>`bool_or(${votes.user} = ${user.id})` : sql<null>`null`
 		})
@@ -42,6 +43,7 @@ export const load: PageServerLoad = async ({ request, params }) => {
 			parent: comments.parent,
 			body: comments.body,
 			createdat: comments.createdat,
+			updatedat: comments.updatedat,
 			votes: countDistinct(commentvotes.user),
 			voted: user
 				? sql<boolean>`bool_or(${commentvotes.user} = ${user.id})`

@@ -20,6 +20,7 @@ export const GET: RequestHandler = async ({ request, params }) => {
 			authorid: ideas.authorid,
 			authorhandle: users.handle,
 			createdat: ideas.createdat,
+			updatedat: ideas.updatedat,
 			votes: count(votes.user),
 			voted: user ? sql<boolean>`bool_or(${votes.user} = ${user.id})` : sql<null>`null`
 		})
@@ -42,6 +43,7 @@ export const GET: RequestHandler = async ({ request, params }) => {
 			parent: comments.parent,
 			body: comments.body,
 			createdat: comments.createdat,
+			updatedat: comments.updatedat,
 			votes: countDistinct(commentvotes.user),
 			voted: user
 				? sql<boolean>`bool_or(${commentvotes.user} = ${user.id})`
@@ -91,7 +93,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
 		return json({ error: 'forbidden' }, { status: 403 });
 	}
 
-	await db.update(ideas).set(parsed.data).where(eq(ideas.id, id));
+	await db.update(ideas).set({ ...parsed.data, updatedat: new Date() }).where(eq(ideas.id, id));
 	return json({ ok: true });
 };
 

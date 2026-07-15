@@ -4,7 +4,7 @@
 	import { theme } from '$lib/theme.svelte';
 	import Heart from '@tabler/icons-svelte/icons/heart';
 	import HeartFilled from '@tabler/icons-svelte/icons/heart-filled';
-	import { CornerDownRight, Trash2 } from '@lucide/svelte';
+	import { CornerDownRight, Trash2, Pencil } from '@lucide/svelte';
 	import Comment from './comment.svelte';
 	import { base } from '$app/paths';
 	import { rendermd } from '$lib/markdown';
@@ -17,6 +17,7 @@
 		parent: string | null;
 		body: string;
 		createdat: string | Date;
+		updatedat?: string | Date | null;
 		votes: number;
 		voted: boolean | null;
 		replies?: CommentData[];
@@ -39,6 +40,25 @@
 	let replybody = $state('');
 	let posting = $state(false);
 	let replies = $state(untrack(() => comment.replies ?? []));
+
+	let editmode = $state(false);
+	let editbody = $state(untrack(() => comment.body));
+
+	async function submitedit() {
+		if (!editbody.trim() || posting) return;
+		posting = true;
+		const res = await fetch(`${base}/api/comments/${comment.id}`, {
+			method: 'PATCH',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ body: editbody.trim() })
+		});
+		if (res.ok) {
+			comment.body = editbody.trim();
+			comment.updatedat = new Date();
+			editmode = false;
+		}
+		posting = false;
+	}
 
 	async function deleteit() {
 		const res = await fetch(`${base}/api/comments/${comment.id}`, { method: 'DELETE' });
@@ -101,17 +121,48 @@
 
 	<div class="flex-1 min-w-0">
 		<!-- Author + time -->
-		<div class="flex items-center gap-2 mb-1.5">
-			<a href={`${base}/profile/${comment.authorhandle}`} class="text-[13px] font-medium text-[var(--p-text)] hover:underline decoration-[var(--p-border-strong)] underline-offset-2">
+		<div class="flex items-center gap-2 mb-1.5 text-[12.5px] text-[var(--p-text-muted)]">
+			<a href={`${base}/profile/${comment.authorhandle}`} class="text-[13px] font-medium text-[var(--p-text)] hover:underline decoration-[var(--p-border-strong)] underline-offset-2 text-[var(--p-text)]">
 				{comment.authorname || comment.authorhandle}
 			</a>
-			<span class="text-[12.5px] text-[var(--p-text-muted)]">{timeago(comment.createdat)}</span>
+			<span>{timeago(comment.createdat)}</span>
+			{#if comment.updatedat}
+				<span class="mx-0.5">·</span>
+				<span class="text-[11.5px] italic">edited {timeago(comment.updatedat)}</span>
+			{/if}
 		</div>
 
 		<!-- Body -->
-		<div class="prose text-[14.5px] mb-2">
-			{@html rendermd(comment.body)}
-		</div>
+		{#if editmode}
+			<div class="mt-2 flex gap-3 p-3 bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[12px] focus-within:border-[var(--p-border-hover)] mb-2">
+				<div class="flex-1">
+					<textarea
+						bind:value={editbody}
+						rows={2}
+						class="w-full bg-transparent border-none outline-none text-[14px] text-[var(--p-text)] placeholder:text-[var(--p-text-muted)] resize-none leading-[1.5] pt-0.5"
+					></textarea>
+					<div class="flex justify-end items-center gap-2 mt-1.5">
+						<button
+							onclick={() => { editmode = false; editbody = comment.body; }}
+							class="inline-flex items-center h-[30px] px-3 rounded-[var(--p-radius-pill)] text-[var(--p-text-secondary)] text-[12.5px] font-medium border border-[var(--p-border)] transition-all duration-[120ms] hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)] hover:bg-[var(--p-bg-hover)]"
+						>
+							Cancel
+						</button>
+						<button
+							onclick={submitedit}
+							disabled={!editbody.trim() || posting}
+							class="inline-flex items-center h-[30px] px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[12.5px] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)] disabled:opacity-40 disabled:cursor-not-allowed"
+						>
+							Save
+						</button>
+					</div>
+				</div>
+			</div>
+		{:else}
+			<div class="prose text-[14.5px] mb-2">
+				{@html rendermd(comment.body)}
+			</div>
+		{/if}
 
 		<!-- Actions -->
 		<div class="flex items-center gap-3.5 text-[12.5px] text-[var(--p-text-muted)]">
@@ -130,6 +181,16 @@
 				>
 					<CornerDownRight size={12} />
 					<span>Reply</span>
+				</button>
+			{/if}
+
+			{#if user?.id === comment.authorid}
+				<button
+					onclick={() => { editmode = true; editbody = comment.body; }}
+					class="inline-flex items-center gap-1 transition-colors duration-[120ms] hover:text-[var(--p-text)]"
+				>
+					<Pencil size={12} />
+					<span>Edit</span>
 				</button>
 			{/if}
 

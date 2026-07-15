@@ -17,7 +17,8 @@ export const ideas = pgTable('ideas', {
 	authorid: text('authorid').notNull().references(() => users.id),
 	status: text('status').notNull().default('open').$type<'open' | 'closed'>(),
 	pinned: boolean('pinned').notNull().default(false),
-	createdat: timestamp('createdat', { withTimezone: true }).notNull().defaultNow()
+	createdat: timestamp('createdat', { withTimezone: true }).notNull().defaultNow(),
+	updatedat: timestamp('updatedat', { withTimezone: true })
 }, (t) => [
 	index().on(t.status),
 	index().on(t.authorid),
@@ -45,7 +46,8 @@ export const comments = pgTable('comments', {
 	authorid: text('authorid').notNull().references(() => users.id),
 	parent: text('parent').references((): any => comments.id, { onDelete: 'cascade' }),
 	body: text('body').notNull(),
-	createdat: timestamp('createdat', { withTimezone: true }).notNull().defaultNow()
+	createdat: timestamp('createdat', { withTimezone: true }).notNull().defaultNow(),
+	updatedat: timestamp('updatedat', { withTimezone: true })
 }, (t) => [
 	index().on(t.idea),
 	index().on(t.parent)
@@ -74,4 +76,8 @@ export const editidea = z.object({
 export const createcomment = z.object({
 	body: z.string().min(1),
 	parent: z.string().optional()
+});
+
+export const editcomment = z.object({
+	body: z.string().min(1)
 });
