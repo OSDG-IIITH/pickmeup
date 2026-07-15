@@ -190,7 +190,7 @@
 				<button
 					onclick={submit}
 					disabled={submitting}
-					class="inline-flex items-center h-9 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13.5px] tracking-[-0.005em] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)] hover:shadow-[0_0_24px_-2px_var(--p-accent-glow)] active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed"
+					class="inline-flex items-center h-9 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13.5px] tracking-[-0.005em] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)] active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed"
 				>
 					{submitting ? 'Posting…' : 'Post idea'}
 				</button>

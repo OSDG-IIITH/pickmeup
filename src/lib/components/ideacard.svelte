@@ -2,7 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { timeago, initials, avatargrad } from '$lib/utils';
-	import { MessageSquare, Heart } from '@lucide/svelte';
+	import { theme } from '$lib/theme.svelte';
+	import IconPinFilled from '@tabler/icons-svelte/icons/pin-filled';
+	import Heart from '@tabler/icons-svelte/icons/heart';
+	import HeartFilled from '@tabler/icons-svelte/icons/heart-filled';
+	import { MessageSquare } from '@lucide/svelte';
 	import { stripmd } from '$lib/markdown';
 
 	interface Idea {
@@ -32,19 +36,16 @@
 	tabindex="0"
 	onclick={() => goto(`${base}/ideas/${idea.id}`)}
 	onkeydown={(e) => e.key === 'Enter' && goto(`${base}/ideas/${idea.id}`)}
-	class="relative bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[14px] flex flex-col gap-3.5 cursor-pointer overflow-hidden transition-[border-color,box-shadow,background] duration-[240ms] ease-out hover:border-[rgba(255,130,180,0.16)] hover:bg-[#1e1117] hover:[box-shadow:0_0_0_1px_rgba(255,130,180,0.10),0_0_22px_2px_rgba(255,93,143,0.07),0_0_48px_6px_rgba(255,93,143,0.03)]"
-	class:pinned={idea.pinned}
+	class="relative bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[14px] flex flex-col gap-3.5 cursor-pointer overflow-hidden transition-[border-color] duration-[200ms] ease-out hover:border-[var(--p-border-strong)]"
 	style="padding: 22px 22px 18px"
 >
 	{#if idea.pinned}
-		<span class="absolute top-3.5 right-4 text-[10px] font-bold tracking-[0.12em] text-[var(--p-accent)] bg-[var(--p-accent-bg)] px-2 py-1 rounded-[4px]">
-			PINNED
-		</span>
+		<IconPinFilled size={14} class="absolute top-4 right-4 text-[var(--p-accent)]" />
 	{/if}
 
 	<h3
 		class="text-[18px] font-semibold tracking-[-0.015em] leading-[1.3] m-0 text-[var(--p-text)]"
-		class:pr-16={idea.pinned}
+		class:pr-8={idea.pinned}
 	>
 		{idea.title}
 	</h3>
@@ -69,8 +70,8 @@
 			class="inline-flex items-center gap-2 text-[12.5px] hover:opacity-80 transition-opacity"
 		>
 			<span
-				class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[10px] border border-white/[0.08] shrink-0"
-				style="background: {avatargrad(idea.authorhandle)}"
+				class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[var(--p-avatar-text)] font-semibold text-[10px] border border-white/[0.08] shrink-0"
+				style="background: {avatargrad(idea.authorhandle, theme.current)}"
 			>
 				{initials(idea.authorname || idea.authorhandle)}
 			</span>
@@ -90,27 +91,13 @@
 				class="inline-flex items-center gap-1.5 h-[30px] px-[10px] pl-2 rounded-[var(--p-radius-pill)] border border-[var(--p-border)] text-[12.5px] font-semibold tabular-nums transition-all duration-[140ms] hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]"
 				class:voted
 			>
-				<Heart
-					size={12}
-					fill={voted ? 'currentColor' : 'none'}
-					class="transition-transform duration-200 {voted ? '-translate-y-px' : ''}"
-				/>
+				{#if voted}
+					<HeartFilled size={12} class="transition-transform duration-200 -translate-y-px" />
+				{:else}
+					<Heart size={12} class="transition-transform duration-200" />
+				{/if}
 				<span>{count}</span>
 			</button>
 		</div>
 	</div>
 </div>
-
-<style>
-	.pinned {
-		background:
-			radial-gradient(ellipse 120% 100% at 0% 0%, rgba(255, 93, 143, 0.07), transparent 60%),
-			var(--p-bg-card);
-	}
-	.voted {
-		color: var(--p-accent);
-		border-color: transparent;
-		background: var(--p-accent-bg-strong);
-		box-shadow: inset 0 0 0 1px var(--p-border-hover), 0 0 16px -4px var(--p-accent-glow);
-	}
-</style>

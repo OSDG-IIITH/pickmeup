@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { initials, avatargrad } from '$lib/utils';
+	import { theme } from '$lib/theme.svelte';
 	import IdeaCard from '$lib/components/ideacard.svelte';
 
 	let { data } = $props();
@@ -46,8 +47,8 @@
 	<!-- Profile header -->
 	<div class="flex items-center gap-6 pt-10 pb-7 border-b border-[var(--p-border)]">
 		<span
-			class="w-[72px] h-[72px] rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[26px] shrink-0 border border-white/[0.08]"
-			style="background: {avatargrad(profile.handle)}"
+			class="w-[72px] h-[72px] rounded-full inline-flex items-center justify-center text-[var(--p-avatar-text)] font-semibold text-[26px] shrink-0 border border-white/[0.08]"
+			style="background: {avatargrad(profile.handle, theme.current)}"
 		>
 			{initials(profile.name || profile.handle)}
 		</span>
@@ -65,7 +66,7 @@
 					Edit profile
 				</button>
 			{:else}
-				<button class="inline-flex items-center h-9 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13.5px] tracking-[-0.005em] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)] hover:shadow-[0_0_24px_-2px_var(--p-accent-glow)]">
+				<button class="inline-flex items-center h-9 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13.5px] tracking-[-0.005em] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)]">
 					Follow
 				</button>
 			{/if}
@@ -121,16 +122,3 @@
 	{/if}
 </div>
 
-<style>
-	.tab-active {
-		color: var(--p-accent-soft);
-		background: var(--p-accent-bg-strong);
-	}
-	.tab-inactive {
-		color: var(--p-text-secondary);
-	}
-	.tab-inactive:hover {
-		color: var(--p-text);
-		background: var(--p-bg-hover);
-	}
-</style>

@@ -3,7 +3,8 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import IdeaCard from '$lib/components/ideacard.svelte';
-	import { Pin, Sparkles } from '@lucide/svelte';
+	import { Sparkles } from '@lucide/svelte';
+	import IconPinFilled from '@tabler/icons-svelte/icons/pin-filled';
 
 	let { data } = $props();
 
@@ -90,7 +91,7 @@
 	{#if !isfiltering && pinned.length > 0}
 		<div class="flex items-baseline justify-between pt-7 pb-4">
 			<span class="text-[13px] font-semibold tracking-[0.08em] uppercase text-[var(--p-text-secondary)] inline-flex items-center gap-2">
-				<Pin size={12} class="text-[var(--p-accent)]" />
+				<IconPinFilled size={12} class="text-[var(--p-accent)]" />
 				Pinned Ideas
 			</span>
 			<span class="text-[13px] text-[var(--p-text-secondary)]">{pinned.length} ideas</span>
@@ -136,20 +137,3 @@
 	{/if}
 </div>
 
-<style>
-	.chip-active {
-		background: var(--p-accent-bg-strong);
-		color: var(--p-accent-soft);
-		border-color: transparent;
-		box-shadow: inset 0 0 0 1px var(--p-border-hover);
-	}
-	.chip-inactive {
-		background: transparent;
-		color: var(--p-text-secondary);
-		border-color: var(--p-border);
-	}
-	.chip-inactive:hover {
-		color: var(--p-text);
-		border-color: var(--p-border-strong);
-	}
-</style>

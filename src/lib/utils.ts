@@ -36,12 +36,26 @@ export function initials(handle: string): string {
 	);
 }
 
-/** derives a warm-pink gradient from a handle string */
-export function avatargrad(handle: string): string {
+/** derives a gradient from a handle string, tinted by theme */
+export function avatargrad(handle: string, themename?: string): string {
 	let hash = 0;
 	for (let i = 0; i < handle.length; i++) hash = ((hash * 31 + handle.charCodeAt(i)) | 0);
-	const hue1 = 330 + (Math.abs(hash) % 30);
-	const hue2 = (hue1 - 30 + 360) % 360;
-	const sat = 60 + (Math.abs(hash >> 4) % 20);
-	return `linear-gradient(135deg, hsl(${hue1} ${sat}% 70%), hsl(${hue2} ${sat - 10}% 50%))`;
+	const n = Math.abs(hash);
+	if (themename === 'dark') {
+		const h = 215 + (n % 50);
+		return `linear-gradient(135deg, hsl(${h} 18% 26%), hsl(${(h + 30) % 360} 22% 18%))`;
+	}
+	if (themename === 'mint') {
+		const h = 145 + (n % 35);
+		const s = 48 + ((n >> 4) % 20);
+		return `linear-gradient(135deg, hsl(${h} ${s}% 52%), hsl(${(h + 18) % 360} ${s - 6}% 36%))`;
+	}
+	if (themename === 'ocean') {
+		const h = 195 + (n % 50);
+		const s = 70 + ((n >> 4) % 20);
+		return `linear-gradient(135deg, hsl(${h} ${s}% 78%), hsl(${(h + 25) % 360} ${s - 10}% 60%))`;
+	}
+	const hue1 = 330 + (n % 30);
+	const sat = 60 + ((n >> 4) % 20);
+	return `linear-gradient(135deg, hsl(${hue1} ${sat}% 70%), hsl(${(hue1 - 30 + 360) % 360} ${sat - 10}% 50%))`;
 }

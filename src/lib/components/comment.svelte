@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { initials, avatargrad, timeago } from '$lib/utils';
-	import { Heart, CornerDownRight, Trash2 } from '@lucide/svelte';
+	import { theme } from '$lib/theme.svelte';
+	import Heart from '@tabler/icons-svelte/icons/heart';
+	import HeartFilled from '@tabler/icons-svelte/icons/heart-filled';
+	import { CornerDownRight, Trash2 } from '@lucide/svelte';
 	import Comment from './comment.svelte';
 	import { base } from '$app/paths';
 	import { rendermd } from '$lib/markdown';
@@ -89,8 +92,8 @@
 <div class="flex gap-3 py-4">
 	<a href={`${base}/profile/${comment.authorhandle}`} class="hover:opacity-80 transition-opacity">
 		<span
-			class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 mt-0.5"
-			style="background: {avatargrad(comment.authorhandle)}"
+			class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[var(--p-avatar-text)] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 mt-0.5"
+			style="background: {avatargrad(comment.authorhandle, theme.current)}"
 		>
 			{initials(comment.authorname || comment.authorhandle)}
 		</span>
@@ -116,7 +119,7 @@
 				onclick={vote}
 				class="inline-flex items-center gap-1 transition-colors duration-[120ms] {voted ? 'text-[var(--p-accent)]' : 'hover:text-[var(--p-text)]'}"
 			>
-				<Heart size={12} fill={voted ? 'currentColor' : 'none'} />
+				{#if voted}<HeartFilled size={12} />{:else}<Heart size={12} />{/if}
 				<span>{votecount}</span>
 			</button>
 
@@ -144,8 +147,8 @@
 		{#if showreply && user}
 			<div class="mt-3 flex gap-3 p-3 bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[12px] transition-[border-color] duration-[160ms] focus-within:border-[var(--p-border-hover)]">
 				<span
-					class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[10px] border border-white/[0.08] shrink-0 mt-0.5"
-					style="background: {avatargrad(user.handle)}"
+					class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[var(--p-avatar-text)] font-semibold text-[10px] border border-white/[0.08] shrink-0 mt-0.5"
+					style="background: {avatargrad(user.handle, theme.current)}"
 				>
 					{initials(user.handle)}
 				</span>

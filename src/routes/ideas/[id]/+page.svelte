@@ -2,7 +2,13 @@
 	import { untrack } from 'svelte';
 	import { base } from '$app/paths';
 	import { initials, avatargrad, timeago } from '$lib/utils';
-	import { ArrowLeft, Heart, MessageSquare, Share2, Pin, PinOff, Trash2 } from '@lucide/svelte';
+	import { theme } from '$lib/theme.svelte';
+	import { ArrowLeft, Share2, Trash2 } from '@lucide/svelte';
+	import Heart from '@tabler/icons-svelte/icons/heart';
+	import HeartFilled from '@tabler/icons-svelte/icons/heart-filled';
+	import IconPinFilled from '@tabler/icons-svelte/icons/pin-filled';
+	import IconPinnedOff from '@tabler/icons-svelte/icons/pinned-off';
+	import { MessageSquare } from '@lucide/svelte';
 	import { goto } from '$app/navigation';
 	import Comment from '$lib/components/comment.svelte';
 	import { rendermd } from '$lib/markdown';
@@ -122,7 +128,7 @@
 				{/each}
 				{#if pinned}
 					<span class="text-[11.5px] font-medium text-[var(--p-accent)] bg-[var(--p-accent-bg)] border border-[var(--p-border-hover)] px-[9px] py-[3px] rounded-[var(--p-radius-pill)] inline-flex items-center gap-1">
-						<Pin size={10} />
+						<IconPinFilled size={10} />
 						Pinned
 					</span>
 				{/if}
@@ -136,7 +142,7 @@
 
 		<!-- Author meta -->
 		<div class="flex items-center gap-3 pb-6 mb-6 border-b border-[var(--p-border)]">
-			<a href={`${base}/profile/${idea.authorhandle}`} class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 hover:opacity-80 transition-opacity" style="background: {avatargrad(idea.authorhandle)}">
+			<a href={`${base}/profile/${idea.authorhandle}`} class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[var(--p-avatar-text)] font-semibold text-[13px] tracking-[-0.01em] border border-white/[0.08] shrink-0 hover:opacity-80 transition-opacity" style="background: {avatargrad(idea.authorhandle, theme.current)}">
 				{initials(idea.authorname || idea.authorhandle)}
 			</a>
 			<div>
@@ -162,13 +168,13 @@
 		<div class="flex items-center gap-2.5 py-[18px] border-t border-b border-[var(--p-border)] mb-8">
 			<button
 				onclick={vote}
-				class="inline-flex items-center gap-1.5 h-[38px] px-3.5 pl-3 rounded-[var(--p-radius-pill)] border text-[13.5px] font-semibold tabular-nums transition-all duration-[140ms] {voted ? 'text-[var(--p-accent)] border-transparent bg-[var(--p-accent-bg-strong)] shadow-[inset_0_0_0_1px_var(--p-border-hover),_0_0_16px_-4px_var(--p-accent-glow)]' : 'text-[var(--p-text-secondary)] border-[var(--p-border)] bg-transparent hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]'}"
+				class="inline-flex items-center gap-1.5 h-[38px] px-3.5 pl-3 rounded-[var(--p-radius-pill)] border text-[13.5px] font-semibold tabular-nums transition-all duration-[140ms] {voted ? 'text-[var(--p-accent)] border-transparent bg-[var(--p-accent-bg-strong)] shadow-[inset_0_0_0_1px_var(--p-border-hover)]' : 'text-[var(--p-text-secondary)] border-[var(--p-border)] bg-transparent hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]'}"
 			>
-				<Heart
-					size={14}
-					fill={voted ? 'currentColor' : 'none'}
-					class="transition-transform duration-200 {voted ? '-translate-y-px' : ''}"
-				/>
+				{#if voted}
+					<HeartFilled size={14} class="transition-transform duration-200 -translate-y-px" />
+				{:else}
+					<Heart size={14} class="transition-transform duration-200" />
+				{/if}
 				<span>{votecount}</span>
 			</button>
 
@@ -193,10 +199,10 @@
 						class="inline-flex items-center gap-1.5 h-[38px] px-3.5 rounded-[var(--p-radius-pill)] border text-[13.5px] font-medium transition-all duration-[120ms] {pinned ? 'text-[var(--p-accent)] border-[var(--p-border-hover)] bg-[var(--p-accent-bg)]' : 'text-[var(--p-text-muted)] border-[var(--p-border)] bg-transparent hover:text-[var(--p-text)] hover:border-[var(--p-border-strong)]'}"
 					>
 						{#if pinned}
-							<PinOff size={14} />
+							<IconPinnedOff size={14} />
 							<span>Unpin</span>
 						{:else}
-							<Pin size={14} />
+							<IconPinFilled size={14} />
 							<span>Pin</span>
 						{/if}
 					</button>
@@ -221,8 +227,8 @@
 		{#if user}
 			<div class="flex gap-3 p-4 bg-[var(--p-bg-card)] border border-[var(--p-border)] rounded-[14px] mb-7 transition-[border-color] duration-[160ms] focus-within:border-[var(--p-border-hover)]">
 				<span
-					class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[#14090d] font-semibold text-[13px] shrink-0 border border-white/[0.08]"
-					style="background: {avatargrad(user.handle)}"
+					class="w-8 h-8 rounded-full inline-flex items-center justify-center text-[var(--p-avatar-text)] font-semibold text-[13px] shrink-0 border border-white/[0.08]"
+					style="background: {avatargrad(user.handle, theme.current)}"
 				>
 					{initials(user.name || user.handle)}
 				</span>
@@ -238,7 +244,7 @@
 						<button
 							onclick={postcomment}
 							disabled={!commentbody.trim() || posting}
-							class="inline-flex items-center h-8 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13px] transition-all duration-[120ms] hover:bg-[var(--p-accent-soft)] disabled:opacity-40 disabled:cursor-not-allowed"
+							class="inline-flex items-center h-8 px-3.5 rounded-[var(--p-radius-pill)] bg-[var(--p-accent)] text-[#14090d] font-semibold text-[13px] transition-colors duration-[120ms] hover:bg-[var(--p-accent-soft)] disabled:opacity-40 disabled:cursor-not-allowed"
 						>
 							Comment
 						</button>
